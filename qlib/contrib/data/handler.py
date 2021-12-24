@@ -372,3 +372,38 @@ class Alpha158(DataHandlerLP):
 class Alpha158vwap(Alpha158):
     def get_label_config(self):
         return (["Ref($vwap, -2)/Ref($vwap, -1) - 1"], ["LABEL0"])
+class Alpha158withMoneyflow(Alpha158):
+    def __init__(self, instruments="csi500", start_time=None, end_time=None, freq="day", infer_processors=[],
+                 learn_processors=_DEFAULT_LEARN_PROCESSORS, fit_start_time=None, fit_end_time=None,
+                 process_type=DataHandlerLP.PTYPE_A, filter_pipe=None, **kwargs):
+        super().__init__(instruments, start_time, end_time, freq, infer_processors, learn_processors, fit_start_time,
+                         fit_end_time, process_type, filter_pipe, **kwargs)
+
+    @staticmethod
+    def parse_config_to_fields(config):
+        fields, names = super().parse_config_to_fields(config)
+        fields += [
+            "$net_big_inflow_rate",
+            "$net_big_inflows",
+            "$net_huge_inflow_rate",
+            "$net_huge_inflows",
+            "$net_main_inflow_rate",
+            "$net_main_inflows",
+            "$net_medium_inflow_rate",
+            "$net_medium_inflows",
+            "$net_small_inflow_rate",
+            "$net_small_inflows",
+        ]
+        names += [
+            "NBIR",
+            "NBI",
+            "NHIR",
+            "NHI",
+            "NMIR",
+            "NMI",
+            "NMEIR",
+            "NMEI",
+            "NSIR",
+            "NSI"
+        ]
+        return fields,names
