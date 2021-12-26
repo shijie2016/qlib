@@ -387,7 +387,7 @@ class Alpha158withMoneyflow(Alpha158):
 
     @staticmethod
     def parse_config_to_fields(config):
-        fields, names = super().parse_config_to_fields(config)
+        fields, names = Alpha158.parse_config_to_fields(config)
         fields += [
             "$net_big_inflow_rate",
             "$net_big_inflows",
