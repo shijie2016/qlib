@@ -5,9 +5,7 @@ from ...data.dataset.handler import DataHandlerLP
 from ...data.dataset.processor import Processor
 from ...utils import get_callable_kwargs
 from ...data.dataset import processor as processor_module
-from ...log import TimeInspector
 from inspect import getfullargspec
-import copy
 
 
 def check_transform_proc(proc_l, fit_start_time, fit_end_time):
@@ -126,9 +124,9 @@ class Alpha360(DataHandlerLP):
         fields += ["$vwap/$close"]
         names += ["VWAP0"]
         for i in range(59, 0, -1):
-            fields += ["Ref($volume, %d)/$volume" % (i)]
+            fields += ["Ref($volume, %d)/($volume+1e-12)" % (i)]
             names += ["VOLUME%d" % (i)]
-        fields += ["$volume/$volume"]
+        fields += ["$volume/($volume+1e-12)"]
         names += ["VOLUME0"]
 
         return fields, names
@@ -249,7 +247,7 @@ class Alpha158(DataHandlerLP):
                 names += [field.upper() + str(d) for d in windows]
         if "volume" in config:
             windows = config["volume"].get("windows", range(5))
-            fields += ["Ref($volume, %d)/$volume" % d if d != 0 else "$volume/$volume" for d in windows]
+            fields += ["Ref($volume, %d)/($volume+1e-12)" % d if d != 0 else "$volume/($volume+1e-12)" for d in windows]
             names += ["VOLUME" + str(d) for d in windows]
         if "rolling" in config:
             windows = config["rolling"].get("windows", [5, 10, 20, 30, 60])
